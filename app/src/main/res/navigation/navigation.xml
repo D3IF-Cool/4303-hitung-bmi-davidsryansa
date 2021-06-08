@@ -9,13 +9,18 @@
         android:id="@+id/hitungFragment"
         android:name="com.example.hitungbmi.ui.HitungFragment"
         android:label="HitungFragment"
-        tools:layout="@layout/fragment_hitung"/>
+        tools:layout="@layout/fragment_hitung">
         <action
             android:id="@+id/action_hitungFragment_to_saranFragment"
             app:destination="@id/saranFragment" />
-
+    </fragment>
     <fragment
         android:id="@+id/saranFragment"
         android:name="com.example.hitungbmi.ui.SaranFragment"
-        android:label="SaranFragment" tools:layout="@layout/fragment_saran"/>
+        android:label="SaranFragment"
+        tools:layout="@layout/fragment_saran">
+        <argument
+            android:name="kategori"
+            app:argType="com.example.hitungbmi.data.KategoriBmi" />
+    </fragment>
 </navigation>
