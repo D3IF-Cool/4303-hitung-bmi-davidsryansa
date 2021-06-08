@@ -10,4 +10,12 @@
         android:name="com.example.hitungbmi.ui.HitungFragment"
         android:label="HitungFragment"
         tools:layout="@layout/fragment_hitung"/>
+        <action
+            android:id="@+id/action_hitungFragment_to_saranFragment"
+            app:destination="@id/saranFragment" />
+
+    <fragment
+        android:id="@+id/saranFragment"
+        android:name="com.example.hitungbmi.ui.SaranFragment"
+        android:label="SaranFragment" tools:layout="@layout/fragment_saran"/>
 </navigation>
