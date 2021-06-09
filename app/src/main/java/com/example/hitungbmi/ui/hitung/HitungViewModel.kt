@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.Navigation
 import com.example.hitungbmi.data.HasilBmi
+import com.example.hitungbmi.data.HitungBmi
+import com.example.hitungbmi.data.HitungBmi.hitung
 import com.example.hitungbmi.data.KategoriBmi
 import java.util.function.ToDoubleBiFunction
 import com.example.hitungbmi.databinding.FragmentHitungBinding
@@ -35,35 +37,21 @@ class HitungViewModel(private val db: BmiDao) : ViewModel() {
     // Navigasi akan bernilai null ketika tidak bernavigasi//
     private val navigasi = MutableLiveData<KategoriBmi?>()
 
-        // Variabel ini sudah berupa LiveData (tidak mutable),
-        // sehingga tidak perlu dijadikan private
-        //val data = db.getLastBmi()
+    // Variabel ini sudah berupa LiveData (tidak mutable),
+    // sehingga tidak perlu dijadikan private
+    //val data = db.getLastBmi()
 
-        fun hitungBmi(berat: String, tinggi: String, isMale: Boolean) {
-        val tinggiCm = tinggi.toFloat() / 100
-        val bmi = berat.toFloat() / (tinggiCm * tinggiCm)
-        val kategori = if (isMale) {
-            when {
-                bmi < 20.5 -> KategoriBmi.KURUS
-                bmi >= 27.0 -> KategoriBmi.GEMUK
-                else -> KategoriBmi.IDEAL
-            }
-        }
-        else {
-            when {
-                bmi < 18.5 -> KategoriBmi.KURUS
-                bmi >= 25.0 -> KategoriBmi.GEMUK
-                else -> KategoriBmi.IDEAL
-            }
-        }
-        hasilBmi.value = HasilBmi(bmi, kategori)
+    fun hitungBmi(berat: String, tinggi: String, isMale: Boolean) {
+
+        val dataBmi = BmiEntity(
+            berat = berat.toFloat(),
+            tinggi = tinggi.toFloat(),
+            isMale = isMale
+        )
+        hasilBmi.value = HitungBmi.hitung(dataBmi)
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val dataBmi = BmiEntity(
-                    berat = berat.toFloat(),
-                    tinggi = tinggi.toFloat(),
-                    isMale = isMale )
                 db.insert(dataBmi)
             }
         }

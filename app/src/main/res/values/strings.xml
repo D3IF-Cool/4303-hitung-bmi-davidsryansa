@@ -41,4 +41,7 @@
 
     <string name="histori">Histori</string>
 
+    <string name="berat_x">BB: %1$.1f</string>
+    <string name="tinggi_x">TB: %1$.1f</string>
+
 </resources>

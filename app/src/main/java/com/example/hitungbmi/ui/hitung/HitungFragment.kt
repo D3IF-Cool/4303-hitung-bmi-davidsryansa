@@ -31,7 +31,7 @@ class HitungFragment : Fragment() {
     private lateinit var binding: FragmentHitungBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View? {
         binding = FragmentHitungBinding.inflate(layoutInflater, container, false)
         binding.button.setOnClickListener{ hitungBmi() }
 
@@ -121,10 +121,10 @@ class HitungFragment : Fragment() {
 
     private fun getKategori(kategori: KategoriBmi): String {
         val stringRes = when (kategori) {
-                KategoriBmi.KURUS -> R.string.kurus
-                KategoriBmi.IDEAL -> R.string.ideal
-                KategoriBmi.GEMUK -> R.string.gemuk
-            }
+            KategoriBmi.KURUS -> R.string.kurus
+            KategoriBmi.IDEAL -> R.string.ideal
+            KategoriBmi.GEMUK -> R.string.gemuk
+        }
 
         return getString(stringRes)
     }
