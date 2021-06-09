@@ -1,30 +1,24 @@
-package com.example.hitungbmi.ui
+package com.example.hitungbmi.ui.hitung
 
-import android.app.Activity
-import android.content.Intent
-import android.os.Bundle
-import android.text.TextUtils
-import android.view.*
-import androidx.appcompat.app.AppCompatActivity
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.example.hitungbmi.R
+import androidx.navigation.Navigation
 import com.example.hitungbmi.data.HasilBmi
 import com.example.hitungbmi.data.KategoriBmi
+import java.util.function.ToDoubleBiFunction
 import com.example.hitungbmi.databinding.FragmentHitungBinding
 
 class HitungViewModel : ViewModel() {
 
+
     // Hasil BMI bisa null jika pengguna belum menghitung BMI//
     private val hasilBmi = MutableLiveData<HasilBmi?>()
 
-    fun hitungBmi(berat: String, tinggi: String, isMale: Boolean) {
+    // Navigasi akan bernilai null ketika tidak bernavigasi//
+    private val navigasi = MutableLiveData<KategoriBmi?>()
+
+        fun hitungBmi(berat: String, tinggi: String, isMale: Boolean) {
         val tinggiCm = tinggi.toFloat() / 100
         val bmi = berat.toFloat() / (tinggiCm * tinggiCm)
         val kategori = if (isMale) {
@@ -41,8 +35,17 @@ class HitungViewModel : ViewModel() {
                 else -> KategoriBmi.IDEAL
             }
         }
-
         hasilBmi.value = HasilBmi(bmi, kategori)
     }
+
+    fun mulaiNavigasi(){
+        navigasi.value = hasilBmi.value?.kategori
+    }
+
+    fun selesaiNavigasi(){
+        navigasi.value=null
+    }
+
     fun getHasilBmi() : LiveData<HasilBmi?> = hasilBmi
+    fun getNavigasi() : LiveData<KategoriBmi?> = navigasi
 }

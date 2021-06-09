@@ -1,3 +1,5 @@
 package com.example.hitungbmi.data
 
-enum class KategoriBmi { KURUS, IDEAL, GEMUK }
+enum class KategoriBmi {
+    KURUS, IDEAL, GEMUK
+}

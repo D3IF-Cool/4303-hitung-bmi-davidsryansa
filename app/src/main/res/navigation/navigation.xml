@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/hitungFragment"
-        android:name="com.example.hitungbmi.ui.HitungFragment"
+        android:name="com.example.hitungbmi.ui.hitung.HitungFragment"
         android:label="HitungFragment"
         tools:layout="@layout/fragment_hitung">
         <action

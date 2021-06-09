@@ -1,4 +1,4 @@
-package com.example.hitungbmi.ui
+package com.example.hitungbmi.ui.hitung
 
 import android.app.Activity
 import android.content.Intent
@@ -18,27 +18,29 @@ import com.example.hitungbmi.databinding.FragmentHitungBinding
 
 class HitungFragment : Fragment() {
 
-    private val viewModel:HitungViewModel by viewModels()
+    private val viewModel: HitungViewModel by viewModels()
     private lateinit var binding: FragmentHitungBinding
-    private lateinit var kategoriBmi: KategoriBmi
 
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
         binding = FragmentHitungBinding.inflate(layoutInflater, container, false)
-        binding.button.setOnClickListener{
-            hitungBmi()
-        }
-        binding.saranButton.setOnClickListener { view: View ->
-            view.findNavController().navigate(HitungFragmentDirections.
-            actionHitungFragmentToSaranFragment(kategoriBmi))
-        }
+        binding.button.setOnClickListener{ hitungBmi() }
+
+        binding.saranButton.setOnClickListener { viewModel.mulaiNavigasi() }
         binding.shareButton.setOnClickListener { shareData() }
         setHasOptionsMenu(true)
         return binding.root
-        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.getNavigasi().observe(viewLifecycleOwner, {
+            if (it == null) return@observe
+            findNavController().navigate(HitungFragmentDirections
+                .actionHitungFragmentToSaranFragment(it))
+            viewModel.selesaiNavigasi()
+        })
 
         viewModel.getHasilBmi().observe(viewLifecycleOwner, {
             if (it == null) return@observe
@@ -55,8 +57,8 @@ class HitungFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_about) { findNavController()
-            .navigate( R.id.aboutFragment)
+        if (item.itemId == R.id.menu_about) {
+            findNavController().navigate( R.id.aboutFragment)
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -78,8 +80,6 @@ class HitungFragment : Fragment() {
             return
         }
 
-        //val tinggiCm = tinggi.toFloat() / 100
-
         val selectedId = binding.radioGroup.checkedRadioButtonId
         if (selectedId == -1) {
             Toast.makeText(context, R.string.gender_invalid,
@@ -87,13 +87,6 @@ class HitungFragment : Fragment() {
             return
         }
         val isMale = selectedId == R.id.priaRadioButton
-        //val bmi = berat.toFloat() / (tinggiCm * tinggiCm)
-        //val kategori = getKategori(bmi, isMale)
-
-        //binding.bmiTextView.text = getString(R.string.bmi_x, bmi)
-        //binding.kategoriTextView.text = getString(R.string.kategori_x, kategori)
-        //binding.saranButton.visibility = View.VISIBLE
-        //binding.buttonGroup.visibility = View.VISIBLE
 
         viewModel.hitungBmi(berat,tinggi,isMale)
     }
@@ -111,31 +104,7 @@ class HitungFragment : Fragment() {
         if (shareIntent.resolveActivity( requireActivity().packageManager)
             != null) { startActivity(shareIntent) } }
 
-    //private fun getKategori(bmi: Float, isMale: Boolean): String {
     private fun getKategori(kategori: KategoriBmi): String {
-        //val stringRes = if (isMale) {
-        //kategoriBmi = if (isMale) {
-            //when {
-                //bmi < 20.5 -> R.string.kurus
-                //bmi >= 27.0 -> R.string.gemuk
-                //else -> R.string.ideal
-                //bmi < 20.5 -> KategoriBmi.KURUS
-                //bmi >= 27.0 -> KategoriBmi.GEMUK
-                //else -> KategoriBmi.IDEAL
-            //}
-        //}
-        //else {
-            //when {
-                //bmi < 18.5 -> R.string.kurus
-                //bmi >= 25.0 -> R.string.gemuk
-                //else -> R.string.ideal
-                //bmi < 18.5 -> KategoriBmi.KURUS
-                //bmi >= 25.0 -> KategoriBmi.GEMUK
-                //else -> KategoriBmi.IDEAL
-            //}
-        //}
-
-        //val stringRes = when (kategoriBmi) {
         val stringRes = when (kategori) {
                 KategoriBmi.KURUS -> R.string.kurus
                 KategoriBmi.IDEAL -> R.string.ideal
@@ -146,7 +115,6 @@ class HitungFragment : Fragment() {
     }
 
 }
-
 private fun NavController.navigate(actionHitungFragmentToSaranFragment: Unit) {
 
 }
